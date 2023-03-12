@@ -64,17 +64,15 @@ Command::new("cargo")
    let mut file = fs::File::create(format!(r"{}\src\commands\mod.rs", args.n)).expect("creating command file failed");
 
    // Fill main.rs
-   let mainbytes = commands::setupmain::setupmainfn();
+   let mainimport = Asset::get("def_com/main.rs").expect("Couldn't fetch main.rs file");
+   let mainbytes = std::str::from_utf8(mainimport.data.as_ref()).expect("Couldn't convert main.rs to bytes");
    let mut mainfile = OpenOptions::new().write(true).truncate(true).open(format!(r"{}\src\main.rs", args.n)).expect("Unable to open main.rs");
    mainfile.write_all(mainbytes.as_bytes()).expect("Couldn't write to main.rs");
    println!("Succesfully created the main.rs file!");
 
    // Create the help command
-   let helpfile = Asset::get("def_com/help.rs").expect("Couldn't fetch help command file");
-   let helpbytes = std::str::from_utf8(helpfile.data.as_ref()).unwrap();
-   //println!("{}", helpfstr);
-
-   //let helpbytes = std::fs::read_to_string(r"commands\default_commands\help.rs").expect("Couldn't read help command file");
+   let helpimport = Asset::get("def_com/help.rs").expect("Couldn't fetch help command file");
+   let helpbytes = std::str::from_utf8(helpimport.data.as_ref()).expect("Couldn't convert help.rs to bytes");
    let mut helpfile = fs::File::create(format!(r"{}\src\commands\help.rs", args.n)).expect("couldn't create help command file");
    helpfile.write_all(helpbytes.as_bytes()).expect("Couldn't create the help command");
    file.write_all(b"pub mod help;\n").expect("Failed to update mod");

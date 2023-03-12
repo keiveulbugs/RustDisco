@@ -38,17 +38,20 @@ pub struct Asset;
 fn main() {
    let args = Args::parse();
 
-   let botname = args.name.unwrap_or("".to_string());
 
-   // Here starts the creation of a new library.
-   println!("\nLet the Disco start 🎉!\n");
-
-   // Runs ```cargo new``` to create a new directory.
-Command::new("cargo")
+   if args.name.is_some() {
+         // Here starts the creation of a new library.
+      println!("\nLet the Disco start 🎉!\n");
+      // Runs ```cargo new``` to create a new directory.
+      Command::new("cargo")
       .arg("new")
-      .arg(botname.clone())
+      .arg(args.name.clone().unwrap())
       .status()
       .expect("Running cargo new failed");
+   }
+
+   let botname = args.name.unwrap_or("".to_string());
+
 
    println!("\nHi {}! Welcome to the party!\n", botname);
 

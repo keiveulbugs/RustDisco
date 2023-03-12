@@ -59,7 +59,7 @@ Command::new("cargo")
    println!("Succesfully created the main.rs file!");
 
    // Create the help command
-   let helpbytes = commands::setuphelp::setuphelpfn();
+   let helpbytes = std::fs::read_to_string(r"src\commands\default_commands\help.rs").expect("Couldn't read help command file");
    let mut helpfile = fs::File::create(format!(r"{}\src\commands\help.rs", args.n)).expect("couldn't create help command file");
    helpfile.write_all(helpbytes.as_bytes()).expect("Couldn't create the help command");
    file.write_all(b"pub mod help;\n").expect("Failed to update mod");

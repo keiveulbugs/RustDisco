@@ -11,7 +11,7 @@ extern crate dotenv_codegen;
 // Your Bot token
 const DISCORD_TOKEN: &str = dotenv!("DISCORD_TOKEN");
 // If you want to have commands specific to only a specific guild, set this as your guild_id.
-const PRIVATEGUILDID: serenity::GuildId = serenity::GuildId(/* Your guild id */);
+const PRIVATEGUILDID: serenity::GuildId = serenity::GuildId(1234567891234567891);
 
 async fn on_ready(
     ctx: &serenity::Context,
@@ -64,20 +64,41 @@ async fn on_ready(
 async fn main() {
     // Build our client.
     let client = poise::Framework::builder()
-        .token(DISCORD_TOKEN)
-        .intents(serenity::GatewayIntents::empty())
-        .options(poise::FrameworkOptions {
-            commands: vec![
-                commands::help::help(),
-            ],
-            ..Default::default()
-        })
-        .user_data_setup(|ctx, ready, framework| Box::pin(on_ready(ctx, ready, framework)))
-        .build()
-        .await
-        .expect("Error creating client");
+    .token(DISCORD_TOKEN)
+    .intents(serenity::GatewayIntents::GUILDS | serenity::GatewayIntents::GUILD_MEMBERS)
+    .options(poise::FrameworkOptions {
+        commands: vec![
+            commands::help::help(),
+        ],
+        ..Default::default()
+    })
+    .setup(|ctx, ready, framework| Box::pin(on_ready(ctx, ready, framework)))
+    .build()
+    .await
+    .expect("Error creating client");
 
+
+    // Start client, show error, and then ask user to provide bot secret as that is the most common cause for failure
     if let Err(why) = client.start().await {
-        println!("Client error: {:?}", why);
+    println!("Client error: {:?}\n\n**********************\nTry entering a working bot-secret:", why);
+    let token :String = read!();
+
+    let client = poise::Framework::builder()
+    .token(token)
+    .intents(serenity::GatewayIntents::GUILDS | serenity::GatewayIntents::GUILD_MEMBERS)
+    .options(poise::FrameworkOptions {
+        commands: vec![
+            commands::help::help(),
+        ],
+        ..Default::default()
+    })
+    .setup(|ctx, ready, framework| Box::pin(on_ready(ctx, ready, framework)))
+    .build()
+    .await
+    .expect("Error creating client");
+
+    if let Err(why2) = client.start().await {
+        println!("Error again, shutting down. \n {}", why2);
     }
+}
 }

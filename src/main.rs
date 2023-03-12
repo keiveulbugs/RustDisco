@@ -12,7 +12,8 @@ use rust_embed::RustEmbed;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-   /// Name of the bot to create
+   /// Name of the bot to create.
+   /// If this command runs, it will set up the whole bot structure.
    #[arg(short, long)]
    name: Option<String>,
 
@@ -37,7 +38,7 @@ pub struct Asset;
 
 fn main() {
    let args = Args::parse();
-
+   let botname = args.name.clone().unwrap_or("".to_string());
 
    if args.name.is_some() {
          // Here starts the creation of a new library.
@@ -45,54 +46,55 @@ fn main() {
       // Runs ```cargo new``` to create a new directory.
       Command::new("cargo")
       .arg("new")
-      .arg(args.name.clone().unwrap())
+      .arg(botname.clone())
       .status()
       .expect("Running cargo new failed");
-   }
 
-   let botname = args.name.unwrap_or("".to_string());
-
-
-   println!("\nHi {}! Welcome to the party!\n", botname);
-
-   // Update the Cargo.toml to include Poise and Tokio
-   let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", botname)).expect("Unable to open file");
-   fileref.write_all(
-   r#"poise = { version = "0.4\5.2", features = ["cache"] }
+      // Update the Cargo.toml to include Poise and Tokio
+      let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", botname)).expect("Unable to open file");
+      fileref.write_all(
+      r#"poise = { version = "0.4\5.2", features = ["cache"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }
 dotenv_codegen = "0.15.0"
-   "#.as_bytes()).expect("Failed to add dependencies");
-   println!("Succesfully added all dependencies to Cargo.toml!");
+      "#.as_bytes()).expect("Failed to add dependencies");
+      println!("Succesfully added all dependencies to Cargo.toml!");
 
-   // Create a commands directory
-   fs::create_dir(format!(r"{}\src\commands", botname)).expect("Failed creating the commands directory");
-   println!("Succesfully created commands directory!");
+      println!("\nHi {}! Welcome to the party!\n", botname);
 
 
-   // Create mod.rs
-   let mut file = fs::File::create(format!(r"{}\src\commands\mod.rs", botname)).expect("creating command file failed");
 
-   // Fill main.rs
-   let mainimport = Asset::get("def_com/main.rs").expect("Couldn't fetch main.rs file");
-   let mainbytes = std::str::from_utf8(mainimport.data.as_ref()).expect("Couldn't convert main.rs to bytes");
-   let mut mainfile = OpenOptions::new().write(true).truncate(true).open(format!(r"{}\src\main.rs", botname)).expect("Unable to open main.rs");
-   mainfile.write_all(mainbytes.as_bytes()).expect("Couldn't write to main.rs");
-   println!("Succesfully created the main.rs file!");
+      // Create a commands directory
+      fs::create_dir(format!(r"{}\src\commands", botname)).expect("Failed creating the commands directory");
+      println!("Succesfully created commands directory!");
 
-   // Create the help command
-   let helpimport = Asset::get("def_com/help.rs").expect("Couldn't fetch help command file");
-   let helpbytes = std::str::from_utf8(helpimport.data.as_ref()).expect("Couldn't convert help.rs to bytes");
-   let mut helpfile = fs::File::create(format!(r"{}\src\commands\help.rs", botname)).expect("couldn't create help command file");
-   helpfile.write_all(helpbytes.as_bytes()).expect("Couldn't create the help command");
-   file.write_all(b"pub mod help;\n").expect("Failed to update mod");
-   println!("Succesfully created the help command!");
 
-   // Create .env file
-   let mut envfile = fs::File::create(format!(r"{}\.env", botname)).expect("Couldn't create a .env file");
-   envfile.write_all("DISCORD_TOKEN=".as_bytes()).expect("Couldn't write to .env file");
-   println!("Succesfully added a .env file!");
+      // Create mod.rs
+      let mut file = fs::File::create(format!(r"{}\src\commands\mod.rs", botname)).expect("creating command file failed");
 
+      // Fill main.rs
+      let mainimport = Asset::get("def_com/main.rs").expect("Couldn't fetch main.rs file");
+      let mainbytes = std::str::from_utf8(mainimport.data.as_ref()).expect("Couldn't convert main.rs to bytes");
+      let mut mainfile = OpenOptions::new().write(true).truncate(true).open(format!(r"{}\src\main.rs", botname)).expect("Unable to open main.rs");
+      mainfile.write_all(mainbytes.as_bytes()).expect("Couldn't write to main.rs");
+      println!("Succesfully created the main.rs file!");
+
+      // Create the help command
+      let helpimport = Asset::get("def_com/help.rs").expect("Couldn't fetch help command file");
+      let helpbytes = std::str::from_utf8(helpimport.data.as_ref()).expect("Couldn't convert help.rs to bytes");
+      let mut helpfile = fs::File::create(format!(r"{}\src\commands\help.rs", botname)).expect("couldn't create help command file");
+      helpfile.write_all(helpbytes.as_bytes()).expect("Couldn't create the help command");
+      file.write_all(b"pub mod help;\n").expect("Failed to update mod");
+      println!("Succesfully created the help command!");
+
+      // Create .env file
+      let mut envfile = fs::File::create(format!(r"{}\.env", botname)).expect("Couldn't create a .env file");
+      envfile.write_all("DISCORD_TOKEN=".as_bytes()).expect("Couldn't write to .env file");
+      println!("Succesfully added a .env file!");
+      println!("Don't forget to add your Discord token in the .env!");
+
+   }
+   
    let mut commandtype;
 
    if args.default.is_some() {

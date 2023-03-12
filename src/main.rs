@@ -1,12 +1,10 @@
 mod commands;
 
 use clap::Parser;
-use clap::builder::Str;
 use std::process::Command;
 use std::fs::OpenOptions;
-use std::io::{Write, Seek};
+use std::io::Write;
 use std::fs;
-use std::io::SeekFrom;
 use rust_embed::RustEmbed;
 
 
@@ -49,9 +47,9 @@ Command::new("cargo")
 
    fileref.write_all(
    r#"poise = { version = "0.4\5.2", features = ["cache"] }
-   tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
-   serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }
-   dotenv_codegen = "0.15.0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }
+dotenv_codegen = "0.15.0"
    "#.as_bytes()).expect("Failed to add dependencies");
    println!("Succesfully added all dependencies to Cargo.toml!");
 

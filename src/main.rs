@@ -45,14 +45,14 @@ Command::new("cargo")
    println!("\nHi {}! Welcome to the party!\n", args.n);
 
    // Update the Cargo.toml to include Poise and Tokio
-   let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", args.n)).expect("Unable to open file");   
-   fileref.write_all(r#"poise = { version = "0.4\5.2", features = ["cache"] }"#.as_bytes()).expect("Failed to add Poise to Cargo.toml");
-   fileref.write_all("\n".as_bytes()).expect("Failed to start a new line after Poise in Cargo.toml");   
-   fileref.write_all(r#"tokio = { version = "1", features = ["macros", "rt-multi-thread"] }"#.as_bytes()).expect("Failed to add Tokio to Cargo.toml");
-   fileref.write_all("\n".as_bytes()).expect("Failed to start a new line after Poise in Cargo.toml");   
-   fileref.write_all(r#"serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }"#.as_bytes()).expect("Failed to add Tokio to Cargo.toml");
-   fileref.write_all("\n".as_bytes()).expect("Failed to start a new line after Poise in Cargo.toml");   
-   fileref.write_all(r#"dotenv_codegen = "0.15.0""#.as_bytes()).expect("Failed to add dotenv_codegen to Cargo.toml");
+   let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", args.n)).expect("Unable to open file");
+
+   fileref.write_all(
+   r#"poise = { version = "0.4\5.2", features = ["cache"] }
+   tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+   serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }
+   dotenv_codegen = "0.15.0"
+   "#.as_bytes()).expect("Failed to add dependencies");
    println!("Succesfully added all dependencies to Cargo.toml!");
 
    // Create a commands directory

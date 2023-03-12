@@ -35,7 +35,7 @@ Command::new("cargo")
 
    // Update the Cargo.toml to include Poise and Tokio
    let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", args.n)).expect("Unable to open file");   
-   fileref.write_all(r#"poise = { version = "0.4", features = ["cache"] }"#.as_bytes()).expect("Failed to add Poise to Cargo.toml");
+   fileref.write_all(r#"poise = { version = "0.4\5.2", features = ["cache"] }"#.as_bytes()).expect("Failed to add Poise to Cargo.toml");
    fileref.write_all("\n".as_bytes()).expect("Failed to start a new line after Poise in Cargo.toml");   
    fileref.write_all(r#"tokio = { version = "1", features = ["macros", "rt-multi-thread"] }"#.as_bytes()).expect("Failed to add Tokio to Cargo.toml");
    fileref.write_all("\n".as_bytes()).expect("Failed to start a new line after Poise in Cargo.toml");   

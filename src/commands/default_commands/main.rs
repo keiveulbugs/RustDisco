@@ -68,6 +68,9 @@ async fn main() {
     .intents(serenity::GatewayIntents::GUILDS | serenity::GatewayIntents::GUILD_MEMBERS)
     .options(poise::FrameworkOptions {
         commands: vec![
+            // Do not remove the help command,
+            // it uses that line to place in new commands at the right position.
+            // Might change this in the future, but am lazy and this was the easiest.
             commands::help::help(),
         ],
         ..Default::default()
@@ -80,25 +83,7 @@ async fn main() {
 
     // Start client, show error, and then ask user to provide bot secret as that is the most common cause for failure
     if let Err(why) = client.start().await {
-    println!("Client error: {:?}\n\n**********************\nTry entering a working bot-secret:", why);
-    let token :String = read!();
-
-    let client = poise::Framework::builder()
-    .token(token)
-    .intents(serenity::GatewayIntents::GUILDS | serenity::GatewayIntents::GUILD_MEMBERS)
-    .options(poise::FrameworkOptions {
-        commands: vec![
-            commands::help::help(),
-        ],
-        ..Default::default()
-    })
-    .setup(|ctx, ready, framework| Box::pin(on_ready(ctx, ready, framework)))
-    .build()
-    .await
-    .expect("Error creating client");
-
-    if let Err(why2) = client.start().await {
-        println!("Error again, shutting down. \n {}", why2);
+    println!("Client error: {:?}\n\n**********************\nTry entering a working bot-secret in the .env file", why);
     }
 }
-}
+

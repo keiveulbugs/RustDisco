@@ -23,7 +23,7 @@ pub fn setupcommand(name :String, pathname :String, commandtype :u64) {
     
     // updating mod.rs file
     let mut modfile = OpenOptions::new().append(true).truncate(false).open(format!(r"{}\src\commands\mod.rs", pathname)).expect("Unable to open mod.rs for new command.");
-    modfile.write_all(format!("pub mod {};", name).as_bytes()).expect("Failed to add the new command file");
+    modfile.write_all(format!("pub mod {};\n", name).as_bytes()).expect("Failed to add the new command file");
 
     // Create new command in command file
     let importexample = if commandtype == 0 {
@@ -34,8 +34,6 @@ pub fn setupcommand(name :String, pathname :String, commandtype :u64) {
         Asset::get("def_com/default.rs").expect("Couldn't fetch help command file")
     };
 
-
-   // let importexample = Asset::get("def_com/example.rs").expect("Couldn't fetch help command file");
     let commandstring = std::str::from_utf8(importexample.data.as_ref()).expect("Couldn't convert help.rs to bytes");
     let newstring =  commandstring.replace("examplecommand", name.as_str());
 

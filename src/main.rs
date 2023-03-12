@@ -89,7 +89,7 @@ dotenv_codegen = "0.15.0"
    envfile.write_all("DISCORD_TOKEN=".as_bytes()).expect("Couldn't write to .env file");
    println!("Succesfully added a .env file!");
 
-   let mut commandtype = 0;
+   let mut commandtype;
 
    if args.default.is_some() {
       commandtype = 0;

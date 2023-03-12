@@ -85,11 +85,12 @@ dotenv_codegen = "0.15.0"
    envfile.write_all("DISCORD_TOKEN=".as_bytes()).expect("Couldn't write to .env file");
    println!("Succesfully added a .env file!");
 
-   commands::setupcommand::setupcommand("examplecommand".to_string(), args.name.clone());
-   println!("Succesfully created an examplecommand!");
+   
 
    if args.default.is_some() {
       let name = args.default.unwrap_or("template".to_string());
+      commands::setupcommand::setupcommand(name.clone(), args.name.clone());
+      println!("Succesfully created a command with the name '{}'!", name);
    }
 
 

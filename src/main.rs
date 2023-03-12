@@ -25,6 +25,18 @@ struct Args {
    /// Deploy an example command
    #[arg(short, long)]
    example: Option<String>,
+
+   /// Deploy a registration command
+   #[arg(short, long)]
+   registration: Option<String>,
+
+   /// Deploy a purge command
+   #[arg(short, long)]
+   purge: Option<String>,
+
+   /// Deploy a status command
+   #[arg(short, long)]
+   status: Option<String>,
 }
 
 
@@ -107,6 +119,27 @@ dotenv_codegen = "0.15.0"
    if args.example.is_some() {
       commandtype = 1;
       let name = args.example.unwrap_or("template".to_string());
+      commands::setupcommand::setupcommand(name.clone(), botname.clone(), commandtype);
+      println!("Succesfully created a command with the name '{}'!", name);
+   }
+
+   if args.registration.is_some() {
+      commandtype = 4;
+      let name = args.registration.unwrap_or("template".to_string());
+      commands::setupcommand::setupcommand(name.clone(), botname.clone(), commandtype);
+      println!("Succesfully created a command with the name '{}'!", name);
+   }
+
+   if args.purge.is_some() {
+      commandtype = 2;
+      let name = args.purge.unwrap_or("template".to_string());
+      commands::setupcommand::setupcommand(name.clone(), botname.clone(), commandtype);
+      println!("Succesfully created a command with the name '{}'!", name);
+   }
+
+   if args.status.is_some() {
+      commandtype = 3;
+      let name = args.status.unwrap_or("template".to_string());
       commands::setupcommand::setupcommand(name.clone(), botname.clone(), commandtype);
       println!("Succesfully created a command with the name '{}'!", name);
    }

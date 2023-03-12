@@ -30,6 +30,12 @@ pub fn setupcommand(name :String, pathname :String, commandtype :u64) {
         Asset::get("def_com/default.rs").expect("Couldn't fetch help command file")
     } else if commandtype == 1 {
         Asset::get("def_com/example.rs").expect("Couldn't fetch help command file")
+    } else if commandtype == 2 {
+        Asset::get("def_com/purge.rs").expect("Couldn't fetch help command file")
+    } else if commandtype == 3 {
+        Asset::get("def_com/status.rs").expect("Couldn't fetch help command file")
+    } else if commandtype == 4 {
+        Asset::get("def_com/registration.rs").expect("Couldn't fetch help command file")
     } else {
         Asset::get("def_com/default.rs").expect("Couldn't fetch help command file")
     };

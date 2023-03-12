@@ -5,7 +5,7 @@ use std::io::SeekFrom;
 
 use crate::Asset;
 
-pub fn setupcommand(name :String, pathname :String) {
+pub fn setupcommand(name :String, pathname :String, commandtype :u64) {
    // inserting name of command
    let mut mainfilebuffer = fs::read_to_string(format!(r"{}\src\main.rs", pathname)).expect("Failed to read main.rs to String");
    let position = mainfilebuffer.find("commands::help").expect("Failed to find the position of `commands::help`");
@@ -26,7 +26,16 @@ pub fn setupcommand(name :String, pathname :String) {
     modfile.write_all(format!("pub mod {};", name).as_bytes()).expect("Failed to add the new command file");
 
     // Create new command in command file
-    let importexample = Asset::get("def_com/example.rs").expect("Couldn't fetch help command file");
+    let importexample = if commandtype == 0 {
+        Asset::get("def_com/default.rs").expect("Couldn't fetch help command file")
+    } else if commandtype == 1 {
+        Asset::get("def_com/example.rs").expect("Couldn't fetch help command file")
+    } else {
+        Asset::get("def_com/default.rs").expect("Couldn't fetch help command file")
+    };
+
+
+   // let importexample = Asset::get("def_com/example.rs").expect("Couldn't fetch help command file");
     let commandstring = std::str::from_utf8(importexample.data.as_ref()).expect("Couldn't convert help.rs to bytes");
     let newstring =  commandstring.replace("examplecommand", name.as_str());
 

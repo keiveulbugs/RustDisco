@@ -20,6 +20,10 @@ struct Args {
    /// Deploy a basic command
    #[arg(short, long)]
    default: Option<String>,
+
+   /// Deploy an example command
+   #[arg(short, long)]
+   example: Option<String>,
 }
 
 
@@ -85,14 +89,22 @@ dotenv_codegen = "0.15.0"
    envfile.write_all("DISCORD_TOKEN=".as_bytes()).expect("Couldn't write to .env file");
    println!("Succesfully added a .env file!");
 
-   
+   let mut commandtype = 0;
 
    if args.default.is_some() {
+      commandtype = 0;
       let name = args.default.unwrap_or("template".to_string());
-      commands::setupcommand::setupcommand(name.clone(), args.name.clone());
+      commands::setupcommand::setupcommand(name.clone(), args.name.clone(), commandtype);
       println!("Succesfully created a command with the name '{}'!", name);
    }
 
+   if args.example.is_some() {
+      commandtype = 1;
+      let name = args.example.unwrap_or("template".to_string());
+      commands::setupcommand::setupcommand(name.clone(), args.name.clone(), commandtype);
+      println!("Succesfully created a command with the name '{}'!", name);
+   }
+   
 
 
 }

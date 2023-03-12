@@ -7,6 +7,8 @@ use std::fs::OpenOptions;
 use std::io::{Write, Seek};
 use std::fs;
 use std::io::SeekFrom;
+use rust_embed::RustEmbed;
+
 
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
@@ -16,6 +18,15 @@ struct Args {
    #[arg(short, long)]
    n: String,
 }
+
+
+// including files
+#[derive(RustEmbed)]
+#[folder = "src/commands/default_commands"]
+#[prefix = "def_com/"]
+struct Asset;
+
+
 
 fn main() {
    let args = Args::parse();
@@ -59,7 +70,11 @@ Command::new("cargo")
    println!("Succesfully created the main.rs file!");
 
    // Create the help command
-   let helpbytes = std::fs::read_to_string(r"commands\default_commands\help.rs").expect("Couldn't read help command file");
+   let helpfile = Asset::get("def_com/help.rs").expect("Couldn't fetch help command file");
+   let helpbytes = std::str::from_utf8(helpfile.data.as_ref()).unwrap();
+   //println!("{}", helpfstr);
+
+   //let helpbytes = std::fs::read_to_string(r"commands\default_commands\help.rs").expect("Couldn't read help command file");
    let mut helpfile = fs::File::create(format!(r"{}\src\commands\help.rs", args.n)).expect("couldn't create help command file");
    helpfile.write_all(helpbytes.as_bytes()).expect("Couldn't create the help command");
    file.write_all(b"pub mod help;\n").expect("Failed to update mod");

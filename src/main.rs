@@ -38,7 +38,7 @@ pub struct Asset;
 
 fn main() {
    let args = Args::parse();
-   let botname = args.name.clone().unwrap_or("".to_string());
+   let botname = args.name.clone().unwrap_or(r".\".to_string());
 
    if args.name.is_some() {
          // Here starts the creation of a new library.

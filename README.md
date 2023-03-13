@@ -11,6 +11,8 @@ Run the following command to install RustDisco! You only need to do this once.
 
 ```cargo install --git https://github.com/keiveulbugs/RustDisco```
 
+*updating RustDisco can be done by rerunning the command.*
+
 
 # Usage
 

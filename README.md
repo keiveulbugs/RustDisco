@@ -44,6 +44,7 @@ All commands are visible below:
 
 
 This will deploy 3 different commands in an existing bot:
+
 ```rustdisco -d ping -p purger -s statuschange```
 
 

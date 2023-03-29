@@ -65,7 +65,7 @@ fn main() {
       // Update the Cargo.toml to include Poise and Tokio
       let mut fileref = OpenOptions::new().append(true).open(format!(r"{}\Cargo.toml", botname)).expect("Unable to open file");
       fileref.write_all(
-      r#"poise = { version = "0.4\5.2", features = ["cache"] }
+      r#"poise = { version = "0.5.2", features = ["cache"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model"] }
 dotenv_codegen = "0.15.0"

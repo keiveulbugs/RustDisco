@@ -262,7 +262,7 @@ dependencies = [
 
 [[package]]
 name = "rustdisco"
-version = "0.1.3"
+version = "0.1.5"
 dependencies = [
  "clap",
  "rust-embed",

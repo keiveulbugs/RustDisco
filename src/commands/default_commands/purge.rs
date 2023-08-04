@@ -67,9 +67,6 @@ pub async fn examplecommand(ctx: poise::Context<'_, (), Error>,
         b.content(format!("**TRIED TO KICK {} USERS**", purgeusersvec.len()))
         
     }).await?;
-
-
-    poise::builtins::register_application_commands_buttons(ctx).await?;
 }
     
 

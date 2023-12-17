@@ -1,6 +1,9 @@
 use crate::Error;
 use poise::serenity_prelude::{self as serenit, Member};
 
+
+
+// This command allows the owner of a guild / server to kick all users with a specific role.
 #[poise::command(slash_command, guild_only = true, required_permissions="ADMINISTRATOR", ephemeral=true)]
 pub async fn examplecommand(ctx: poise::Context<'_, (), Error>,
 #[description = "Which role to purge?"] role: serenity::model::guild::Role,
@@ -21,12 +24,12 @@ pub async fn examplecommand(ctx: poise::Context<'_, (), Error>,
     let vecofusers = serenity::model::id::GuildId::members(guildid, ctx, Some(1000), None).await?;
     let mut purgeusersvec :Vec<Member> = vec![];
 
+    // Iterate over all users found, and check if they have the role specified.
     for users in vecofusers {
         if users.roles.contains(&role.id) {
             if list {
                 ctx.say(format!{"{:#?}", users.display_name()}).await?;
             }
-            
             purgeusersvec.push(users.clone());            
         };
     };
@@ -52,7 +55,7 @@ pub async fn examplecommand(ctx: poise::Context<'_, (), Error>,
 {
     for user in purgeusersvec.clone() {
         match user.kick_with_reason(ctx, reason.as_str()).await {
-            Ok(()) => buttonmsg.clone(),
+            Ok(()) => buttonmsg.clone(), // Check if this can be removed.
             _ => ctx.say(format!("Can't kick {}", user)).await?
         };
     }
